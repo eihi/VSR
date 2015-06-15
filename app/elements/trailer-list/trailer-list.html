@@ -1,0 +1,38 @@
+<dom-module id="trailer-list">
+  <!--<link rel="import" type="css" href="trailer-list.css">-->
+  <link rel="import" href="../bower_components/neon-animation/animations/slide-up-animation.html">
+  <style>
+    :host {
+      display: block;
+    }
+    h1, p{
+      padding:16px;
+    }
+  </style>
+  <template>
+    <firebase-collection data="{{data}}"
+                      location="https://resplendent-inferno-5602.firebaseio.com/videos">
+    </firebase-collection>
+    <template is="dom-repeat" items="{{data}}" as="trailer">
+      <paper-material elevation="1" entry-animation="slide-up-animation">
+        
+        <div horizontal layout>
+          <div>
+            <h1>{{trailer.title}}</h1>
+          </div>
+          <div flex>&nbsp;</div>
+          <div>
+            <iron-icon icon="delete"></iron-icon>
+          </div>
+        </div>
+        <google-youtube video-id="{{trailer.source}}" fluid="true"></google-youtube>
+        <p class="paper-font-body2">{{trailer.description}}</p>
+      </paper-material>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'trailer-list'
+    });
+  </script>
+</dom-module>

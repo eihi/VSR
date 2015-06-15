@@ -1,0 +1,24 @@
+<dom-module id="trailer-button-add">
+  <!--<link rel="import" type="css" href="trailer-list.css">-->
+  <style>
+    :host {
+      display: block;
+    }
+    #addTrailerAction {
+      position: fixed;
+      bottom: 1rem;
+      right: 1.4rem;
+    }
+  </style>
+  <template>
+    <firebase-collection data="{{data}}"
+                      location="https://resplendent-inferno-5602.firebaseio.com/videos">
+    </firebase-collection>
+    <paper-fab id="addTrailerAction" icon="add"></paper-fab>
+  </template>
+  <script>
+    Polymer({
+      is: 'trailer-button-add'
+    });
+  </script>
+</dom-module>
