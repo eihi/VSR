@@ -1,5 +1,4 @@
 <dom-module id="trailer-button-add">
-  <!--<link rel="import" type="css" href="trailer-list.css">-->
   <style>
     :host {
       display: block;
@@ -11,14 +10,20 @@
     }
   </style>
   <template>
-    <firebase-collection data="{{data}}"
-                      location="https://resplendent-inferno-5602.firebaseio.com/videos">
-    </firebase-collection>
-    <paper-fab id="addTrailerAction" icon="add"></paper-fab>
+    <!--<paper-fab data-route="newtrailer" id="addTrailerAction" icon="add" on-tap="newTrailer"></paper-fab>-->
+    <!--<paper-fab data-route="newtrailer" id="addTrailerAction" icon="add" href="/newtrailer"></paper-fab>-->
+    <a data-route="newtrailer" href="/trailers/add">
+      <paper-fab data-route="newtrailer" id="addTrailerAction" icon="add" href="/trailers/add"></paper-fab>
+    </a>
+    
   </template>
   <script>
     Polymer({
-      is: 'trailer-button-add'
+      is: 'trailer-button-add',
+      newTrailer: function() {
+        window.location.assign('/#!/newtrailer/');
+        window.location.reload();
+      }
     });
   </script>
 </dom-module>

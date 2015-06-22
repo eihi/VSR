@@ -1,0 +1,57 @@
+<dom-module id="trailer-list-all">
+  
+
+  <style>
+    :host {
+      display: block;
+    }
+    h1, p{
+      padding:16px;
+    }
+  </style>
+  <template>
+    <firebase-collection data="{{trailers}}"
+                      location="https://resplendent-inferno-5602.firebaseio.com/videos">
+    </firebase-collection>
+    <template is="dom-repeat" items="{{trailers}}" as="trailer">
+      <paper-material elevation="1">
+        <paper-toolbar>
+          <div class="title">{{trailer.title}}</div>
+          <div flex></div>
+          
+          <!--<paper-icon-button data-route="edit" icon="create" on-tap="editItem"></paper-icon-button>-->
+          <paper-icon-button icon="delete" on-tap="deleteItem"></paper-icon-button>
+          <paper-icon-button icon="favorite-border" on-tap="favoriteItem"></paper-icon-button>
+        </paper-toolbar>
+        <google-youtube chromeless="true" video-id="{{trailer.youtubeid}}" fluid="true"></google-youtube>
+        <p class="paper-font-body2">{{trailer.description}}</p>
+      </paper-material>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'trailer-list-all',
+      deleteItem: function(data) {
+        var videoReference = api.get('videos');
+        videoReference.on("value", function(snapshot) {
+          var fav = snapshot.val();
+          delete fav[data.model.trailer.__firebaseKey__];
+          videoReference.set(fav);
+        }, function (errorObject) {
+          console.log("The delete failed: " + errorObject.code);
+        });
+      },
+      favoriteItem: function(data) {
+        if(user.isLoggedIn()) {
+          var trailer = data.model.trailer;
+          var trailerId = trailer.__firebaseKey__;
+          user.favorite(trailerId);
+        }
+      },
+      editItem: function(data){
+        window.location.assign('/#!/trailers/'+data.model.trailer.__firebaseKey__+'/edit');
+        window.location.reload();
+      }
+    });
+  </script>
+</dom-module>

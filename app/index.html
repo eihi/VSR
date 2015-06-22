@@ -53,6 +53,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- will be replaced with elements/elements.vulcanized.html -->
   <link rel="import" href="elements/elements.html">
   <!-- endreplace-->
+  
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 </head>
 
 <body unresolved class="fullbleed layout vertical">
@@ -71,12 +73,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
               <a data-route="home" href="/">
                 <iron-icon icon="home"></iron-icon>
-                <span>Home</span>
+                <span>All Trailers</span>
               </a>
 
               <a data-route="trailers" href="/trailers">
-                <iron-icon icon="info"></iron-icon>
-                <span>Trailers</span>
+                <iron-icon icon="favorite"></iron-icon>
+                <span>My Trailers</span>
               </a>
 
               <a data-route="contact" href="/contact">
@@ -93,8 +95,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <span class="flex"></span>
 
           <!-- Toolbar icons -->
-          <paper-icon-button icon="refresh" onclick="location.reload()"></paper-icon-button>
-          <paper-icon-button icon="search"></paper-icon-button>
+          <paper-icon-button icon="refresh" onclick="location.reload()" alt="Reload"></paper-icon-button>
+          <paper-icon-button icon="account-circle" onclick="user.login()" alt="Login"></paper-icon-button>
+          <paper-icon-button icon="cancel" onclick="user.logout()" aria-label="Logout"></paper-icon-button>
 
           <!-- Application name -->
           <div class="middle paper-font-display2 app-name">Movie Trailers</div>
@@ -109,15 +112,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
-              <paper-material elevation="1">
-                <h1>Welcome!</h1>
-                <p class="paper-font-body2">This is Esté's Movie Trailers web app</p>
-              </paper-material>
+                <trailer-list-all></trailer-list-all>
+                <trailer-button-add></trailer-button-add>
             </section>
 
             <section data-route="trailers">
-                <trailer-list></trailer-list>
-                <trailer-button-add></trailer-button-add>
+                <trailer-list-favorite></trailer-list-favorite>
             </section>
 
             <section data-route="contact">
@@ -126,6 +126,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <p>Esté Tigele</p>
                 <p>eitigele@student.avans.nl</p>
               </paper-material>
+            </section>
+
+            <section data-route="add">
+              <trailer-item edit=false></trailer-item>
+            </section>
+
+            <section data-route="edit">
+              <trailer-item edit="true" itemid="{{params.id}}"></trailer-item>
             </section>
 
           </iron-pages>
@@ -151,7 +159,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
+  <script src="scripts/api.js"></script>
+  <script src="scripts/user.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/trailer.js"></script>
   <!-- endbuild-->
+
 </body>
 
 </html>

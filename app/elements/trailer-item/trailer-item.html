@@ -1,0 +1,66 @@
+<dom-module id="trailer-item">
+  <style>
+    :host {
+      display: block;
+    }
+    paper-material {
+      padding: 16px;
+    }
+  </style>
+  <template>
+    <paper-toolbar>
+          <div class="title">{{title}}</div>
+          <div flex></div>
+          <paper-icon-button icon="save" on-tap="save"></paper-icon-button>
+        </paper-toolbar>
+    <google-youtube chromeless="true" video-id="{{source.input}}" fluid="true"></google-youtube>
+	  <paper-material elevation="1">
+      <paper-input label="Title" value="{{title::input}}"></paper-input>
+      <paper-input label="Source" value="{{source::input}}"></paper-input>
+      <paper-input label="Description" value="{{description::input}}"></paper-input>
+	  </paper-material>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'trailer-item',
+      save: function(data) {
+        trailer.setTitle(this.title);
+        trailer.setDescription(this.description);
+        trailer.setSource(this.source);
+        api.post('videos', {
+          'title': trailer.getTitle(),
+          'source': trailer.getSource(),
+          'youtubeid': trailer.getYoutubeId(),
+          'description': trailer.getDescription()
+          });
+      },
+      ready: function() {
+        this.description = trailer.description;
+      },
+      properties: {
+        itemid:{
+          type: String,
+          value: "",
+          notify:true
+        },
+        title: {
+          type: String,
+          value: "",
+          notify:true
+        },
+        source: {
+          type: String,
+          value: "",
+          notify:true
+        },
+        description: {
+          type: String,
+          value: "",
+          notify:true
+        }
+      }
+    });
+  })();
+</script>
