@@ -43,14 +43,22 @@
       },
       favoriteItem: function(data) {
         if(user.isLoggedIn()) {
-          var trailer = data.model.trailer;
-          var trailerId = trailer.__firebaseKey__;
-          user.favorite(trailerId);
+          var tmptrailer = data.model.trailer;
+          //var trailerId = trailer.__firebaseKey__;
+          trailer.setId(tmptrailer.__firebaseKey__);
+          trailer.setDescription(tmptrailer.description);
+          trailer.setSource(tmptrailer.source);
+          trailer.setTitle(tmptrailer.title);
+          console.log(trailer.getId())
+          user.favorite("");
+          document.querySelector("#add-to-favorite-success").show();          
+        } else {
+          document.querySelector("#add-to-favorite-error").show();
         }
       },
       editItem: function(data){
-        window.location.assign('/#!/trailers/'+data.model.trailer.__firebaseKey__+'/edit');
-        window.location.reload();
+        window.location.replace('/#!/trailers/'+data.model.trailer.__firebaseKey__+'/edit');
+        //window.location.reload();
       }
     });
   </script>

@@ -1,4 +1,6 @@
 <dom-module id="trailer-list-favorite">
+  <script src="scripts/api.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <style>
     :host {
       display: block;
@@ -7,51 +9,47 @@
       padding:16px;
     }
   </style>
-  <template>
-    <firebase-collection id="firefav" data="{{favorites}}"
-                      location="https://resplendent-inferno-5602.firebaseio.com/favorites/este">
-    </firebase-collection>
+  <template is="dom-bind">
+    <firebase-collection location$="{{userfavorites}}" data="{{favorites}}"></firebase-collection>
+    
     <template is="dom-repeat" items="{{favorites}}" as="favorite">
       
       <paper-material elevation="1">
         <paper-toolbar>
           <div class="title">{{favorite.title}}</div>
-          <div flex>{{firefav}}</div>
-          <paper-icon-button icon="favorite" on-tap="unfavorite">
-          </paper-icon-button>
+          <div flex></div>
+          <paper-icon-button icon="favorite" on-tap="unfavorite"></paper-icon-button>
         </paper-toolbar>
-        <google-youtube chromeless="true" video-id="{{favorite.source}}" fluid="true"></google-youtube>
+        <google-youtube chromeless="true" video-id="{{favorite.youtubeid}}" fluid="true"></google-youtube>
         <p class="paper-font-body2">{{favorite.description}}</p>
       </paper-material>
     </template>
   </template>
   <script>
+    
     Polymer({
       is: 'trailer-list-favorite',
       properties: {
-        firefav: {
+        apiUrl: String,
+        userId: String,
+        userfavorites: {
           type: String,
-          computed: 'getFavorites()'
+          computed: 'computeUserfavorites(apiUrl, userId)'
         }
       },
-      getFavorites: function() {
-        return 'foo';
-      },
       unfavorite: function(data) {
-        var authRef = new Firebase("https://resplendent-inferno-5602.firebaseio.com");
-                var authData = authRef.getAuth();
-                if (authData) {
-                  console.log("User " + authData.uid + " is logged in with " + authData.provider);
-                  
-                var ref = new Firebase('https://resplendent-inferno-5602.firebaseio.com/favorites/'+authData.uid);
-                ref.on("value", function(snapshot) {
-                  var fav = snapshot.val();
-                  delete fav[data.model.favorite.__firebaseKey__];
-                  ref.set(fav);
-                }, function (errorObject) {
-                  console.log("The delete failed: " + errorObject.code);
-                });
-              }
+        var trailerId = data.model.favorite.__firebaseKey__;
+        console.log('Unfavorite');
+        user.unfavorite(trailerId);
+        document.querySelector("#remove-from-favorite-success").show();    
+      },
+      computeUserfavorites: function(apiUrl, userId) {
+        //'https://resplendent-inferno-5602.firebaseio.com/favorites/google:105432979600625131139'
+        if (user.isLoggedIn()) {
+          return apiUrl + user.isLoggedIn().uid;
+        } else {
+          this.innerHTML = '<paper-material elevation="1">Login to save your favorite trailers ;)</paper-material>';
+        }
       }
     });
   </script>
